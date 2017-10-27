@@ -28,3 +28,18 @@
       copy:
         src: /Users/tetuya/.ssh/id_rsa.pub
         dest: /root
+
+    - name: ssh login permit root
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#PermitRootLogin\s+'
+        line: PermitRootLogin yes
+        validate: sshd -t -f %s
+      notify:
+        - ssh reload
+  
+  handlers:
+    - name: ssh reload
+      service:
+        name: sshd
+        state: restarted
