@@ -23,3 +23,8 @@
         name: nginx 
         state: started
         enabled: Yes 
+
+    - name: copy test local to remote
+      copy:
+        src: /Users/tetuya/.ssh/id_rsa.pub
+        dest: /root
