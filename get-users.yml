@@ -1,0 +1,26 @@
+- name: get host user name
+  hosts: all
+  tasks:
+    - name: get user name for /etc/passwd
+      command: cut --delimiter=':' --fields=1 /etc/passwd
+      register: username_result
+      changed_when: false
+
+    - name: print username_result
+      debug:
+        var: username_result
+
+    - name: result of the command is generated for user list
+      set_fact: 
+        username_list: "{{ username_result.stdout_lines }}"
+
+    - name: nginx  When the user exists.
+      debug:
+        msg: このマシンにはnginxユーザーが存在します
+      when: "'nginx' in username_list"
+
+    - name: すべてのユーザーが実在するか確認
+      user:
+        name: "{{ item }}"
+        createhome: false
+      with_items: "{{ username_list }}"
