@@ -2,44 +2,5 @@
 - name: Playbook tutorial
   hosts: all
   become: true
-  tasks: 
-    - name: libselinux-python install
-      yum:
-        name: libselinux-python
-        state: present
-
-    - name: EPEL repo install
-      yum: 
-        name: epel-release
-        state: present
-
-    - name: Nginx install
-      yum:
-        name: nginx
-        state: present
-
-    - name: start nginx
-      service: 
-        name: nginx 
-        state: started
-        enabled: Yes 
-
-    - name: copy test local to remote
-      copy:
-        src: /Users/tetuya/.ssh/id_rsa.pub
-        dest: /root
-
-    - name: ssh login permit root
-      lineinfile:
-        dest: /etc/ssh/sshd_config
-        regexp: '^#PermitRootLogin\s+'
-        line: PermitRootLogin yes
-        validate: sshd -t -f %s
-      notify:
-        - ssh reload
-  
-  handlers:
-    - name: ssh reload
-      service:
-        name: sshd
-        state: restarted
+  roles:
+    - role: nginx

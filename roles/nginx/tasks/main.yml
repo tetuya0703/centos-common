@@ -1,0 +1,28 @@
+---
+# tasks file for nginx
+- name: libselinux-python & EPEL Rep install
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - libselinux-python
+    - epel-release
+
+- name: stop firewall
+  service:
+    name: firewalld 
+    state: stopped
+
+- name: disabled firewall
+  command: systemctl disable firewalld  
+
+- name: Nginx install
+  yum:
+    name: nginx
+    state: present
+
+- name: start nginx
+  service: 
+    name: nginx 
+    state: started
+    enabled: Yes 
