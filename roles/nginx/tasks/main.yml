@@ -26,3 +26,30 @@
     name: nginx 
     state: started
     enabled: Yes 
+
+- name: group add nginx
+  group:
+    name: "{{ nginx_group }}"
+    system: true
+
+- name: user add nginx
+  user:
+    name: "{{ nginx_user }}"
+    home: /var/lib/nginx
+    shell: /sbin/nologin
+    group: "{{ nginx_group }}"
+    append: true
+    system: true
+
+- name: nginx config template
+  template:
+    src: nginx.j2.conf
+    dest: /etc/nginx/nginx.conf
+    validate: nginx -t -c %s
+  notify:
+    - nginx_reload
+
+- name: nginx_reload
+  service:
+    name: nginx
+    state: reloaded
