@@ -25,7 +25,7 @@
   service: 
     name: nginx 
     state: started
-    enabled: Yes 
+    enabled: true 
 
 - name: group add nginx
   group:
@@ -47,9 +47,4 @@
     dest: /etc/nginx/nginx.conf
     validate: nginx -t -c %s
   notify:
-    - nginx_reload
-
-- name: nginx_reload
-  service:
-    name: nginx
-    state: reloaded
+    - nginx reload
